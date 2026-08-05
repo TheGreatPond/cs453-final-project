@@ -14,7 +14,13 @@ reportsRouter.post('/', authenticateToken, async (req, res, next) => {
     // TODO(PART 5): Do not call generateReport() from this request handler.
     const jobId = randomUUID();
     const studentId = req.user.sub;
-    return res.status(501).json({ error: 'Report submission is not implemented yet.' });
+    console.log(studentId)
+    const status = "pending";
+    
+    console.log(db.createReportJob( {id: jobId, studentId: studentId, status: status}));
+    reportQueue.send({jobId: jobId, studentId: studentId});
+
+    return res.status(202).json({ jobId: jobId, status: status, statusUrl: `/reports/${jobId}`});
   } catch (error) {
     return next(error);
   }

@@ -157,6 +157,29 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorNotFound"
 
+  /reports:
+    post:
+      summary: Create new report     
+      responses:
+        "202":
+          description: Report request accepted
+
+  /reports/{id}:
+    get:
+      summary: Fetch report by id
+      responses:
+        "200":
+          description: Report returned
+        "404":
+          description: "Resource requested not found and therefore not returned"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorNotFound"  
+        "401":
+          description: "Need to reauthenticate"
+        "403":
+          description: "User is forbidden from reading requested report"
 
   #
   # Remember:
@@ -216,6 +239,22 @@ components:
         completed:
           type: integer
           example: "0"
+    # ReportInput:
+    #   type: object
+    #   required:
+    #     - id
+    #     - studentId
+    #     - status
+    #   properties:
+    #     id:
+    #       type: string
+    #       example: "report-001"
+    #     student_id:
+    #       type: string
+    #       example: "djs001"
+    #     status:
+    #       type: string
+    #       example: "pending"
   # DONE: Define an ErrorResponse schema with an error message.
     ErrorNotFound:
       type: object

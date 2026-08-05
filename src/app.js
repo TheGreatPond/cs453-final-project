@@ -7,7 +7,7 @@ import cors from "cors";
 export function createApp() {
 
   const app = express();
-
+  // I've added cors so that my openapi plug in would stop whining
   app.use(cors({
     origin: true
     }));

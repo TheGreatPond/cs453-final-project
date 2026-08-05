@@ -214,3 +214,13 @@ a user could then use the method and URI "GET <my_host>:<my_port>/api/reports/<m
   - To make it easier to replace/ build more easily readable code that we can later modify
 - Why must the route use await when calling db.query()?
   - If we did not wait for the response from the database, we would risk returning an undefined result if the rest of the function completed before the database query was returned.
+
+## Part 5.
+
+### 3. Queue Behavior
+
+- why the API returns 202 Accepted instead of 200 OK or 201 Created,
+  - the API returns 202 since it is telling the client that the work is not completed yet and it is not returning a completed item which is usually signified by a 200 status code, but it has successfully been queued
+
+- one advantage of generating the report in a background worker instead of inside the route handler.
+  - we can queue multiple reports to be generated and come back at a much later date and expect them all to be complete rather than needing to stay at the keyboard as each report is generated
