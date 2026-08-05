@@ -258,4 +258,29 @@ Identify one place where the request could fail and explain how the API should r
 
 If we were to fail authorization and not belong to one of the groups necessary for the route, the authorization middleware, would return a "403 Forbidden" error and prevent us from making a request to the database to retrieve our requested information.
 
-2. 
+### 2. Synchronous vs. Asynchronous Processing
+
+Describe one operation that should be completed directly in an HTTP request and one operation that would be better handled using a message queue and background worker.
+
+Explain:
+
+- why each processing model is appropriate,
+
+- what the client receives,
+
+- how failures would be handled,
+
+- how a database could be used to track the operation’s result or status.
+
+**A.** A health request would be more suited for a simple http request, while something that takes longer like report generation would be more suited for a message queue. 
+
+For the health request, since it is expecting an answer that would simply be the current status of the cluster which is quick to find, it does not need a message queue to handle the request and would likely only receive a few lines of json and a status 200 in response.
+
+For the report generation the client would simply receive a 202 status code with a signification of what was submitted so that it would know that the report was in the works but it would not need to stop all work while the report was being generated.
+
+In the event of a failure for the health check, the route could return an unhealthy status with a 500 error code if the issue was server side
+
+In the event of a failure for the report generator, the error could be held in the status of the requests field within a database. This would allow the user to query the results of their report generation and later see the error that stopped the generation from occuring
+
+### 3. Lessons Learned
+
