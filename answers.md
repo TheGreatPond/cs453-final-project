@@ -228,3 +228,34 @@ a user could then use the method and URI "GET <my_host>:<my_port>/api/reports/<m
 ## Part 6. OpenAPI Specification
 
 See openapi-task.yaml
+
+## Part 7 — Reflection
+
+### 1. Following a Request Through the System
+Choose one protected API operation and trace it from the client’s request to the server’s response.
+
+Explain how at least four of the following participate in processing the request:
+
+- HTTP,
+
+- Express routing,
+
+- middleware,
+
+- authentication,
+
+- authorization,
+
+- database access,
+
+- error handling,
+
+- OpenAPI documentation.
+
+Identify one place where the request could fail and explain how the API should respond.
+
+**A.** Lets say a client wanted to get a list of all of the task within our database. The easiest way for us to do this would be to open our OpenAPI document in a VScode extension, enter their auth token in the authorize menu, expand the tab for "GET /tasks", and then hit "Try it out", and then execute. This will send an HTTP request to our server. The first item that our request would hit is the Express router which would then call the function specified for our method of "GET" and our route of /tasks. The request would then get passed to the authenticateToken function to verify that our JWT is valid (authneticating us) and then move to the requireRole.js middleware to ensure that we are part of a role that is allowed to use the "GET /tasks" route (making sure we are authorized for our request). After passing both authorization, we would then get into the function to get taskj itself which makes a request to our database for the information we request before returning that data in an http response.
+
+If we were to fail authorization and not belong to one of the groups necessary for the route, the authorization middleware, would return a "403 Forbidden" error and prevent us from making a request to the database to retrieve our requested information.
+
+2. 
