@@ -224,3 +224,7 @@ a user could then use the method and URI "GET <my_host>:<my_port>/api/reports/<m
 
 - one advantage of generating the report in a background worker instead of inside the route handler.
   - we can queue multiple reports to be generated and come back at a much later date and expect them all to be complete rather than needing to stay at the keyboard as each report is generated
+
+## Part 6. OpenAPI Specification
+
+See openapi-task.yaml

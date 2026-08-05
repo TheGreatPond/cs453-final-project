@@ -25,10 +25,14 @@ paths:
                   status:
                     type: string
                     example: {"tasks": [{"id": "task-001","title": "Watch Week 6 lecture","course": "CS453","student_id": "djs001","completed": 0},{"id": "task-002","title": "Complete REST API exercise","course": "CS453","student_id": "djs001","completed": 1},{"id": "task-003","title": "Read authentication notes","course": "CS453","student_id": "student002","completed": 0}]}
+        "401":
+          description: "Need to reauthenticate"
+        "403":
+          description: "User is forbidden from reading list of tasks"
     post:
       summary: "Adds new task to list"
       requestBody:
-        description: "needs a title and status of task"
+        description: "needs a title, course, and completion status of task. (Completion status signified with a 1 for complete, 0 for incomplete)"
         required: true
         content:
           application/json:
@@ -43,6 +47,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorInvalidBody"
+        "401":
+          description: "Need to reauthenticate"
+        "403":
+          description: "User is forbidden from creating a task"
 
   /tasks/{id}:
     get:
@@ -67,17 +75,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorNotFound"
+        "401":
+          description: "Need to reauthenticate"
+        "403":
+          description: "User is forbidden from reading requested task"
     put:
       summary: Update one task in list
       parameters:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           required: true
-          description: Numeric ID of the task to update
+          description: Numeric ID of the task to replace
       requestBody:
-        description: "needs title and status of task"
+        description: "needs a title, course, and completion status of task. (Completion status signified with a 1 for complete, 0 for incomplete)"
         required: true
         content:
           application/json:
@@ -102,17 +114,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorInvalidBody"
+        "401":
+          description: "Need to reauthenticate"
+        "403":
+          description: "User is forbidden from replacing requested task"
     patch:
       summary: Update part of one task in list
       parameters:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           required: true
           description: Numeric ID of the task to update
       requestBody:
-        description: "needs a combination of any of the following: title or status"
+        description: "needs a combination of any of the following: title, course, and completion status of task. (Completion status signified with a 1 for complete, 0 for incomplete)"
         required: true
         content:
           application/json:
@@ -138,15 +154,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorInvalidBody"
+        "401":
+          description: "Need to reauthenticate"
+        "403":
+          description: "User is forbidden from updating requested task"
     delete:
       summary: Delete task from db
       parameters:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           required: true
-          description: Numeric ID of the task to delete
+          description: ID of the task to delete
       responses:
         "204":
           description: "Null response"
@@ -156,6 +176,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorNotFound"
+        "401":
+          description: "Need to reauthenticate"
+        "403":
+          description: "User is forbidden from deleting requested task"
 
   /reports:
     post:
@@ -166,6 +190,13 @@ paths:
 
   /reports/{id}:
     get:
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the report to GET
       summary: Fetch report by id
       responses:
         "200":
@@ -239,23 +270,6 @@ components:
         completed:
           type: integer
           example: "0"
-    # ReportInput:
-    #   type: object
-    #   required:
-    #     - id
-    #     - studentId
-    #     - status
-    #   properties:
-    #     id:
-    #       type: string
-    #       example: "report-001"
-    #     student_id:
-    #       type: string
-    #       example: "djs001"
-    #     status:
-    #       type: string
-    #       example: "pending"
-  # DONE: Define an ErrorResponse schema with an error message.
     ErrorNotFound:
       type: object
       properties:
@@ -289,7 +303,7 @@ components:
           type: string
           example: "exampleuser"
   securitySchemes:
-    bearerAuth:            # Arbitrary name for the scheme
+    bearerAuth:        
       type: http
       scheme: bearer
-      bearerFormat: JWT    # Optional hint for documentation
+      bearerFormat: JWT    
