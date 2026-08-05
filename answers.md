@@ -284,3 +284,30 @@ In the event of a failure for the report generator, the error could be held in t
 
 ### 3. Lessons Learned
 
+Imagine that you must give a short “lessons learned” presentation to a development team building its first web API.
+
+Identify three practices from this course that you would recommend. At least two must relate to topics from the second half of the course, such as:
+
+- database integration,
+
+- password or token security,
+
+- authentication and authorization,
+
+- PKI and HTTPS,
+
+- JWT or OAuth,
+
+- message queues,
+
+- asynchronous processing.
+
+For each practice, briefly explain what problem it prevents or helps solve.
+
+The three topics I would recommend focusing would be PKI and HTTPS, authentication and authorization, and password or token security.
+
+For PKI and HTTPS, I would recommend these since every work environment that I have been a part of pushes for data to be encrypted as it moves over the network. While generating certs and having to replace them before they expire can be a nuisance, using HTTPS rather than HTTP can be a simple solution for encrypting sensitive data over the network and will likely become a need if you are ever building a piece of software that is meant to be deployed at scale.
+
+For authentication and authorization, I would recommend this due to the focus that many organizations are making nowadays on giving the least amount of privileges possible. If you begin your projects with security in mind from conception, you will not need to worry about locking down your application at a later date to only allow a subset of users to access a subset of resources. 
+
+As for how to do authentication, if at all possible I would recommend leaning on OAuth for authentication so that you can avoid holding on to any user passwords that could potentially be leaked. By leaning on OAuth providers like google, you can save your end users from having to memorize another account credential while also saving yourself the liability of having a credential leaked in a data breach.
