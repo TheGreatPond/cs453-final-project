@@ -1,16 +1,43 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../config.js';
 
-// The imports above are supplied so students can use jwt and config.jwtSecret.
+const jwtSecret = config.jwtSecret;
+
+// The imports above are supplied so students can use jwt and config.jwtSecret. 
+// My version is largely stolen from your example from the authorization module a few weeks ago
 export function authenticateToken(req, res, next) {
-  // TODO(PART 3): Validate the Bearer JWT and set req.user before calling next().
-  return res.status(501).json({ error: 'Authentication is not implemented yet.' });
+  const authorization = req.get("authorization");
+
+  if (!authorization?.startsWith("Bearer ")) {
+    return res.status(401).json({
+      error: "Unauthorized",
+      message: "Send a Bearer token in the Authorization header."
+    });
+  }
+
+  const token = authorization.slice("Bearer ".length);
+
+  try {
+    req.user = jwt.verify(token, jwtSecret);
+    next();
+  } catch {
+    res.status(401).json({
+      error: "Unauthorized",
+      message: "The access token is missing, invalid, or expired."
+    });
+  }
 }
 
 export function requireRole(...allowedRoles) {
   return (req, res, next) => {
-    // TODO(PART 3): Authorize req.user.role against allowedRoles before calling next().
-    return res.status(501).json({ error: 'Authorization is not implemented yet.' });
+    if (allowedRoles.includes(req.user.role)){
+      next()
+    } else {
+    res.status(403).json({
+      error: "Forbidden",
+      message: "This user does not have the required role to access this resource."
+    });
+    }
   };
 }
 

@@ -196,4 +196,21 @@ a user could then use the method and URI "GET <my_host>:<my_port>/api/reports/<m
 
 ## Part 3.
 
-See code
+### 4. Error Classification
+- No access token was provided
+  -  401 unauthorized
+- The JWT has expired	
+  - 401 unauthorized
+- The JWT signature is invalid	
+  - 401 unauthorized
+- A validly authenticated student attempts an instructor-only operation	
+  - 403 Forbidden
+
+## Part 4.
+
+### 2. Database and Asynchronous Behavior
+
+- Why should the task ID be supplied as a query parameter instead of being inserted directly into the SQL string?
+  - To make it easier to replace/ build more easily readable code that we can later modify
+- Why must the route use await when calling db.query()?
+  - If we did not wait for the response from the database, we would risk returning an undefined result if the rest of the function completed before the database query was returned.
